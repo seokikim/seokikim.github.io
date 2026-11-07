@@ -8,11 +8,52 @@ body{font-weight:300}main{padding:env(safe-area-inset-top) 0 env(safe-area-inset
 /* Figma typography is exported as vector outlines for consistent device rendering. */
 main{grid-template-rows:minmax(16px,103fr) 84px minmax(12px,29.58fr) minmax(90px,282.15fr) minmax(12px,39.27fr) 72px minmax(20px,68fr) 105px minmax(16px,61fr)}
 header>img{display:block}.intro{display:flex;justify-content:center;align-items:center}.intro img{display:block;max-width:100%}.copy{height:22px;display:flex;justify-content:center;align-items:center}.copy img{display:block;max-width:100%}.social a,.social img{width:45px;height:45px}.visual{overflow:hidden}.visual img{left:11.3%;top:-16.87%;width:77.4%;height:133.74%;object-fit:fill}.visual canvas{inset:0;width:100%;height:100%}
-</style></head><body><main><header aria-label="김서연 Seoyeon Kim · Product Designer"><img src="assets/type-header.svg" width="284" height="84" alt="김서연 Seoyeon Kim · Product Designer"></header><div class="visual" aria-hidden="true"><img src="assets/blue-gradient.png" alt=""><canvas></canvas></div><p class="intro"><img src="assets/type-intro.svg" alt="안녕하세요, 반갑습니다. 복잡함 속에서 본질을 찾고, 한 끗의 다름을 만드는 디자이너 김서연입니다."></p><section class="contact" aria-label="연락처"><div class="details"><button class="copy" data-copy="01090399581" aria-label="전화번호 복사: 010 9039 9581"><img src="assets/type-phone.svg" alt="010 9039 9581"></button><button class="copy" data-copy="kellykinoma@gmail.com" aria-label="이메일 복사: kellykinoma@gmail.com"><img src="assets/type-email.svg" alt="kellykinoma@gmail.com"></button></div><nav class="social" aria-label="포트폴리오 및 프로필"><a href="https://www.behance.net/Seoyeonkeem" target="_blank" rel="noopener noreferrer" aria-label="Behance 새 창에서 열기"><img src="assets/behance.png" width="45" height="45" alt="Behance"></a><a href="https://www.linkedin.com/in/seoyeonkim0926" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn 새 창에서 열기"><img src="assets/linkedin.png" width="45" height="45" alt="LinkedIn"></a></nav></section></main><div class="toast" role="status" aria-live="polite"></div><script>
+/* Full-screen motion layer; foreground retains its original Figma layout. */
+main{position:relative;isolation:isolate;touch-action:none}header,.intro,.contact{position:relative;z-index:1}.visual{position:absolute;inset:0;height:100%;width:100%;z-index:0;pointer-events:none;overflow:hidden;grid-row:auto}.visual canvas{opacity:1}.toast{z-index:3}
+</style></head><body><main><header aria-label="김서연 Seoyeon Kim · Product Designer"><img src="assets/type-header.svg" width="284" height="84" alt="김서연 Seoyeon Kim · Product Designer"></header><div class="visual" aria-hidden="true"><canvas></canvas></div><p class="intro"><img src="assets/type-intro.svg" alt="안녕하세요, 반갑습니다. 복잡함 속에서 본질을 찾고, 한 끗의 다름을 만드는 디자이너 김서연입니다."></p><section class="contact" aria-label="연락처"><div class="details"><button class="copy" data-copy="01090399581" aria-label="전화번호 복사: 010 9039 9581"><img src="assets/type-phone.svg" alt="010 9039 9581"></button><button class="copy" data-copy="kellykinoma@gmail.com" aria-label="이메일 복사: kellykinoma@gmail.com"><img src="assets/type-email.svg" alt="kellykinoma@gmail.com"></button></div><nav class="social" aria-label="포트폴리오 및 프로필"><a href="https://www.behance.net/Seoyeonkeem" target="_blank" rel="noopener noreferrer" aria-label="Behance 새 창에서 열기"><img src="assets/behance.png" width="45" height="45" alt="Behance"></a><a href="https://www.linkedin.com/in/seoyeonkim0926" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn 새 창에서 열기"><img src="assets/linkedin.png" width="45" height="45" alt="LinkedIn"></a></nav></section></main><div class="toast" role="status" aria-live="polite"></div><script>
 let timer;const toast=document.querySelector('.toast');document.querySelectorAll('[data-copy]').forEach(button=>button.addEventListener('click',async()=>{let ok=false;try{await navigator.clipboard.writeText(button.dataset.copy);ok=true}catch{const field=document.createElement('textarea');field.value=button.dataset.copy;field.style.cssText='position:fixed;top:0;left:0;opacity:0;font-size:16px';document.body.append(field);field.focus();field.select();field.setSelectionRange(0,field.value.length);try{ok=document.execCommand('copy')}catch{}field.remove();button.focus({preventScroll:true})}toast.textContent=ok?'복사되었습니다.':'길게 눌러 연락처를 복사해주세요.';toast.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>toast.classList.remove('show'),1800)}));
 
-// Deform the original artwork in narrow overlapping strips, preserving its colors.
-(()=>{const box=document.querySelector('.visual'),img=box.querySelector('img'),canvas=box.querySelector('canvas'),ctx=canvas.getContext('2d',{alpha:false});if(!ctx)return;const reduced=matchMedia('(prefers-reduced-motion: reduce)');let raf=0,start=performance.now(),last=0,loaded=false;
-function draw(now){raf=0;if(!loaded)return;if(now-last>30||reduced.matches){last=now;const ratio=Math.min(devicePixelRatio||1,2),w=Math.round(box.clientWidth*ratio),h=Math.round(box.clientHeight*ratio);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);const t=reduced.matches?0:((now-start)%12000)/12000*Math.PI*2;const sw=img.naturalWidth,sh=img.naturalHeight,artW=w*.774,artH=h*1.3374,left=w*.113,top=-h*.1687;for(let x=0;x<artW;x+=2){const u=x/artW,envelope=Math.sin(u*Math.PI);const dy=reduced.matches?0:envelope*h*(.055*Math.sin(t+u*5.5)+.025*Math.sin(t*2-u*7));const scale=reduced.matches?1:1+.065*envelope*Math.sin(t-u*4);const dx=reduced.matches?0:w*.018*Math.sin(t)*envelope;ctx.drawImage(img,u*sw,0,Math.min(3,artW-x)/artW*sw,sh,left+x+dx,top+dy+(artH-artH*scale)*.5,Math.min(3,artW-x)+.5,artH*scale)}}if(!reduced.matches&&!document.hidden)raf=requestAnimationFrame(draw)}
-function resume(){cancelAnimationFrame(raf);last=0;if(!document.hidden)draw(performance.now())}function init(){loaded=true;box.classList.add('ready');resume()}if(img.complete&&img.naturalWidth)init();else img.addEventListener('load',init,{once:true});document.addEventListener('visibilitychange',resume);reduced.addEventListener('change',resume);new ResizeObserver(resume).observe(box)})();
+// Soft colored trails follow independently orbiting circles. No image or font downloads.
+(()=>{
+const box=document.querySelector('.visual'),canvas=box.querySelector('canvas'),ctx=canvas.getContext('2d');if(!ctx)return;
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+const colors={blue:'#bacbf1',yellow:'#f0ee77',purple:'#5c1a61',mauve:'#733c7a',lavender:'#c4a4df'};
+const seeds=[[.61,.17,0],[.49,.29,0],[.23,.36,0],[.60,.39,1],[.86,.41,1],[.19,.48,1],[.35,.53,2],[.63,.49,0],[.70,.59,0],[.32,.63,0],[.38,.74,0],[.58,.79,0],[.10,.69,2]];
+const dots=seeds.map(([x,y,type],i)=>({x,y,ox:x,oy:y,type,phase:i*2.399,history:[]}));
+let w=0,h=0,raf=0,last=0,time=0,pointer=null;
+// Pre-render soft edges so mobile browsers do not blur a whole canvas every frame.
+const sprites={};function sprite(color,soft){const key=color+soft;if(sprites[key])return sprites[key];const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d'),r=g.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,color);r.addColorStop(soft?.25:.64,color);r.addColorStop(soft?.65:.82,color+'99');r.addColorStop(1,color+'00');g.fillStyle=r;g.fillRect(0,0,128,128);return sprites[key]=c}
+function stamp(x,y,r,color,alpha,soft){ctx.globalAlpha=alpha;ctx.drawImage(sprite(color,soft),x-r,y-r,r*2,r*2)}
+function render(dt){ctx.clearRect(0,0,w,h);const radius=w*.053;
+for(const [i,d] of dots.entries()){
+const p=d.phase;
+// Every harmonic closes at 48 seconds, with continuous position and velocity.
+const a=time*Math.PI*2/48;
+let x=d.ox+.115*(Math.sin(a+p)-Math.sin(p))+.045*(Math.sin(2*a-p)-Math.sin(-p));
+let y=d.oy+.085*(Math.cos(a+p)-Math.cos(p))+.035*(Math.sin(3*a+p)-Math.sin(p));
+x=Math.max(.065,Math.min(.935,x));y=Math.max(.14,Math.min(.82,y));
+if(pointer&&!reduced.matches){x=pointer.x+Math.cos(p+a)*(.025+i*.003);y=pointer.y+Math.sin(p+a)*(.018+i*.002)}
+const ease=1-Math.exp(-dt/(pointer?.8:1.4));d.x+=(x-d.x)*ease;d.y+=(y-d.y)*ease;
+if(!reduced.matches){d.history.unshift({x:d.x,y:d.y});if(d.history.length>26)d.history.pop()}
+const main=d.type===1?(i%2?colors.purple:colors.mauve):colors.blue;
+const trail=d.type===0?colors.yellow:colors.lavender;
+// Sparse translucent stamps give a luminous colored smear instead of dark accumulation.
+for(let j=d.history.length-1;j>=0;j-=3){const q=d.history[j],f=j/26;stamp(q.x*w-Math.cos(p)*radius*f*.8,q.y*h+radius*f*1.7,radius*(1.1+f*.65),trail,.10*(1-f*.5),true)}
+stamp(d.x*w-Math.cos(p)*radius*.25,d.y*h+radius*.65,radius*1.55,trail,.65,true);
+stamp(d.x*w,d.y*h,radius*(d.type===2?1.15:1),main,d.type===2?.5:.95,d.type===2);
+}ctx.globalAlpha=1;
+}
+function frame(now){raf=0;const elapsed=last?Math.min((now-last)/1000,.05):1/30;if(!last||now-last>=1000/30){last=now;if(!reduced.matches)time+=elapsed;render(elapsed)}if(!reduced.matches&&!document.hidden)raf=requestAnimationFrame(frame)}
+function resume(){cancelAnimationFrame(raf);last=0;if(!document.hidden)frame(performance.now())}
+function resize(){const r=box.getBoundingClientRect();w=r.width;h=r.height;const scale=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(w*scale);canvas.height=Math.round(h*scale);ctx.setTransform(scale,0,0,scale,0,0);dots.forEach(d=>d.history=[]);resume()}
+const main=document.querySelector('main');
+function position(e){const r=box.getBoundingClientRect();pointer={id:e.pointerId,x:(e.clientX-r.left)/w,y:(e.clientY-r.top)/h};canvas.dataset.interaction='attract'}
+main.addEventListener('pointerdown',e=>{if(!e.isPrimary||e.target.closest('a,button')||reduced.matches)return;position(e)});
+window.addEventListener('pointermove',e=>{if(pointer&&pointer.id===e.pointerId)position(e)},{passive:true});
+function release(e){if(pointer&&(!e||e.pointerId===pointer.id)){pointer=null;canvas.dataset.interaction='free'}}
+window.addEventListener('pointerup',release);window.addEventListener('pointercancel',release);window.addEventListener('blur',()=>release());
+// Keep a single-finger background gesture from becoming a browser scroll gesture.
+main.addEventListener('touchmove',e=>{if(pointer&&e.touches.length===1)e.preventDefault()},{passive:false});
+document.addEventListener('visibilitychange',()=>{release();resume()});reduced.addEventListener('change',()=>{release();dots.forEach(d=>d.history=[]);resume()});new ResizeObserver(resize).observe(box);canvas.dataset.interaction='free';
+})();
 </script></body></html>
