@@ -23,7 +23,9 @@ main{grid-template-rows:minmax(16px,102fr) 84px minmax(12px,29.58fr) minmax(90px
 .copy{border-radius:6px;transition:none}
 .copy:active,.copy.is-tapped{background-color:rgba(83,94,106,.14);transform:scale(.97)}
 @media(prefers-reduced-motion:reduce){.copy{transition:none}.copy:active,.copy.is-tapped{transform:none}}
-</style></head><body><main><header aria-label="김서연 Seoyeon Kim · Product Designer"><img draggable="false" src="assets/type-header.svg" width="284" height="84" alt="김서연 Seoyeon Kim · Product Designer"></header><div class="visual" aria-hidden="true"></div><p class="intro"><img draggable="false" src="assets/type-intro.svg" alt="안녕하세요, 반갑습니다. 복잡함 속에서 본질을 찾고, 한 끗의 다름을 만드는 디자이너 김서연입니다."></p><section class="contact" aria-label="연락처"><div class="details"><button class="copy" data-copy="01090399581" aria-label="전화번호 복사: 010 9039 9581"><img draggable="false" src="assets/type-phone.svg" alt="010 9039 9581"></button><button class="copy" data-copy="kellykinoma@gmail.com" aria-label="이메일 복사: kellykinoma@gmail.com"><img draggable="false" src="assets/type-email.svg" alt="kellykinoma@gmail.com"></button></div><nav class="social" aria-label="포트폴리오 및 프로필"><a href="https://www.behance.net/Seoyeonkeem" target="_blank" rel="noopener noreferrer" aria-label="Behance 새 창에서 열기"><img draggable="false" src="assets/behance.png" width="48" height="48" alt="Behance"></a><a href="https://www.linkedin.com/in/seoyeonkim0926" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn 새 창에서 열기"><img draggable="false" src="assets/linkedin.png" width="48" height="48" alt="LinkedIn"></a></nav></section></main><div class="toast" role="status" aria-live="polite"></div><script>
+/* Full-width background prevents clipping at the former 430px card boundary. */
+main{max-width:none}
+</style></head><body><main><header aria-label="김서연 Seoyeon Kim · Product Designer"><img draggable="false" src="assets/type-header.svg" width="284" height="84" alt="김서연 Seoyeon Kim · Product Designer"></header><div class="visual" aria-hidden="true"></div><p class="intro"><img draggable="false" src="assets/type-intro.svg" alt="안녕하세요, 반갑습니다. 복잡함 속에서 본질을 찾고, 한 끗의 다름을 만드는 디자이너 김서연입니다."></p><section class="contact" aria-label="연락처"><div class="details"><button class="copy" data-copy="01090399581" aria-label="전화번호 복사: 010 9039 9581"><img draggable="false" src="assets/type-phone.svg" alt="010 9039 9581"></button><button class="copy" data-copy="kellykinoma@gmail.com" aria-label="이메일 복사: kellykinoma@gmail.com"><img draggable="false" src="assets/type-email.svg" alt="kellykinoma@gmail.com"></button></div><nav class="social" aria-label="포트폴리오 및 프로필"><a href="https://www.linkedin.com/in/seoyeonkim0926" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn 새 창에서 열기"><img draggable="false" src="assets/linkedin.png" width="48" height="48" alt="LinkedIn"></a><a href="https://www.behance.net/Seoyeonkeem" target="_blank" rel="noopener noreferrer" aria-label="Behance 새 창에서 열기"><img draggable="false" src="assets/behance.png" width="48" height="48" alt="Behance"></a></nav></section></main><div class="toast" role="status" aria-live="polite"></div><script>
 let timer,tapTimer;const toast=document.querySelector('.toast');document.querySelectorAll('[data-copy]').forEach(button=>button.addEventListener('click',async()=>{clearTimeout(tapTimer);document.querySelectorAll('.copy.is-tapped').forEach(el=>el.classList.remove('is-tapped'));button.classList.add('is-tapped');tapTimer=setTimeout(()=>button.classList.remove('is-tapped'),100);let ok=false;try{await navigator.clipboard.writeText(button.dataset.copy);ok=true}catch{const field=document.createElement('textarea');field.value=button.dataset.copy;field.style.cssText='position:fixed;top:0;left:0;opacity:0;font-size:16px';document.body.append(field);field.focus();field.select();field.setSelectionRange(0,field.value.length);try{ok=document.execCommand('copy')}catch{}field.remove();button.focus({preventScroll:true})}toast.textContent=ok?(button.dataset.copy.includes('@')?'이메일이 복사되었습니다.':'연락처가 복사되었습니다.'):'길게 눌러 연락처를 복사해주세요.';toast.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>toast.classList.remove('show'),1800)}));
 
 // Velocity-aligned light trails: prepaint textures, animate only transforms and opacity.
@@ -66,15 +68,18 @@ blob(tg,47,100,r*.92,r*.78,trail,opacity*.32);
 tail.style.opacity='.85';
 return {node,tail,x,y,i,tx,ty,angle:Math.atan2(-ty,-tx),px:0,py:0,vx:0,vy:0};
 });
-function paint(dt){const scale=w/552,fade=Math.min(1,Math.max(0,(time-1.2)/2.5)),ramp=fade*fade*(3-2*fade),a=2*Math.PI*time/36;
-for(const d of dots){const p=d.i*2.399;
+function paint(dt){const scale=Math.min(w,430)/552,fade=Math.min(1,Math.max(0,(time-1.2)/2.5)),ramp=fade*fade*(3-2*fade),a=2*Math.PI*time/36;
+for(const d of dots){const p=d.i*2.399,baseX=d.x/552*w;
 let dx=ramp*(Math.sin(a+p)-Math.sin(p))*w*.12;
 let dy=ramp*((Math.cos(a+p)-Math.cos(p))*h*.065+Math.sin(time*2*Math.PI/4.5+p)*h*.009);
-if(pointer){dx=pointer.x-d.x*scale+Math.cos(p+a)*w*.045;dy=pointer.y-d.y*h/1204+Math.sin(p+a)*h*.025}
+if(pointer){dx=pointer.x-baseX+Math.cos(p+a)*w*.045;dy=pointer.y-d.y*h/1204+Math.sin(p+a)*h*.025}
 // Underdamped spring supplies a small, soft bounce on attraction and release.
 const k=pointer?30:20,damping=pointer?8:7;
 d.vx+=((dx-d.px)*k-d.vx*damping)*dt;d.vy+=((dy-d.py)*k-d.vy*damping)*dt;d.px+=d.vx*dt;d.py+=d.vy*dt;
-const x=d.x*scale-90*scale+d.px,y=d.y*h/1204-100*scale+d.py;
+const margin=110*scale,wide=w>430;
+const centerX=wide?Math.max(margin,Math.min(w-margin,baseX+d.px)):baseX+d.px;
+const centerY=wide?Math.max(margin,Math.min(h-margin,d.y*h/1204+d.py)):d.y*h/1204+d.py;
+const x=centerX-90*scale,y=centerY-100*scale;
 d.node.style.transform=`translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0)`;
 const speed=Math.hypot(d.vx,d.vy)/Math.max(scale,.1),strength=Math.min(1,speed/28);
 const follow=pointer?1:ramp;
@@ -85,7 +90,7 @@ d.tail.style.transform=`rotate(${d.angle.toFixed(4)}rad) scaleX(${((1-follow)*in
 }}
 function frame(now){raf=0;const dt=last?Math.min((now-last)/1000,1/30):0;last=now;if(!reduced.matches)time+=dt;paint(dt);if(!reduced.matches&&!document.hidden)raf=requestAnimationFrame(frame)}
 function resume(){cancelAnimationFrame(raf);last=0;if(!document.hidden)frame(performance.now())}
-function resize(){w=box.clientWidth;h=box.clientHeight;for(const d of dots){d.node.style.width=w/552*180+'px';d.node.style.height=w/552*200+'px'}paint(0);resume()}
+function resize(){w=box.clientWidth;h=box.clientHeight;for(const d of dots){d.node.style.width=Math.min(w,430)/552*180+'px';d.node.style.height=Math.min(w,430)/552*200+'px'}paint(0);resume()}
 function position(e){const r=box.getBoundingClientRect();pointer={id:e.pointerId,x:e.clientX-r.left,y:e.clientY-r.top};box.dataset.interaction='attract'}
 main.addEventListener('pointerdown',e=>{if(!e.isPrimary||e.target.closest('a,button')||reduced.matches)return;position(e)});
 window.addEventListener('pointermove',e=>{if(pointer&&pointer.id===e.pointerId)position(e)},{passive:true});
